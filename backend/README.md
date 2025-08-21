@@ -57,7 +57,7 @@ SUPABASE_URL="your-supabase-url"
 SUPABASE_ANON_KEY="your-supabase-anon-key"
 
 # Server
-PORT=3001
+PORT=5000
 ```
 
 ### Миграции базы данных
@@ -157,7 +157,7 @@ const getMe = async (req: Request, res: Response) => {
 **Регистрация**
 
 ```bash
-curl -X POST http://localhost:3001/api/v1/user/sign-up \
+curl -X POST http://localhost:5000/api/v1/user/sign-up \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -170,7 +170,7 @@ curl -X POST http://localhost:3001/api/v1/user/sign-up \
 **Создание задачи**
 
 ```bash
-curl -X POST http://localhost:3001/api/v1/todo-prisma/create \
+curl -X POST http://localhost:5000/api/v1/todo-prisma/create \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
