@@ -105,7 +105,7 @@ npm run dev
 ### 4. Открыть приложение
 
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:3001
+- Backend API: http://localhost:5000
 
 ## 🔐 Как работает авторизация
 
