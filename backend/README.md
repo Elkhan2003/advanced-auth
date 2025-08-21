@@ -48,9 +48,11 @@
 
 ```env
 # Database
+# backend =>  prisma <= supabase (она не умеет рабоать с auth)
 DATABASE_URL="postgresql://username:password@localhost:5432/mydb"
 
 # Supabase
+# подключаемся на прямую в supabase
 SUPABASE_URL="your-supabase-url"
 SUPABASE_ANON_KEY="your-supabase-anon-key"
 
