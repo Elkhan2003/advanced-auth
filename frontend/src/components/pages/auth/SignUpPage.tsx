@@ -7,12 +7,12 @@ import { useSignUpMutation } from "../../../api/user";
 export const SignUpPage: FC = () => {
 	const router = useRouter();
 	const signUpMutation = useSignUpMutation();
-	
+
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
 		fullName: "",
-		age: 0
+		age: 0,
 	});
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -27,9 +27,9 @@ export const SignUpPage: FC = () => {
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		setFormData(prev => ({
+		setFormData((prev) => ({
 			...prev,
-			[name]: name === "age" ? Number(value) : value
+			[name]: name === "age" ? Number(value) : value,
 		}));
 	};
 
@@ -84,12 +84,13 @@ export const SignUpPage: FC = () => {
 								min="1"
 							/>
 						</div>
-						<button 
-							type="submit" 
+						<button
+							type="submit"
 							className={scss.submitButton}
-							disabled={signUpMutation.isPending}
-						>
-							{signUpMutation.isPending ? "Регистрация..." : "Зарегистрироваться"}
+							disabled={signUpMutation.isPending}>
+							{signUpMutation.isPending
+								? "Регистрация..."
+								: "Зарегистрироваться"}
 						</button>
 						{signUpMutation.error && (
 							<div className={scss.error}>

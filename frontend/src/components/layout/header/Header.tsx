@@ -14,6 +14,8 @@ export const Header: FC = () => {
 		enabled: isAuthenticated(),
 	});
 
+	console.log(meData);
+
 	const handleLogOut = async () => {
 		try {
 			await signOutMutation.mutateAsync();

@@ -31,14 +31,30 @@ const signUpUser = async (req: Request, res: Response) => {
 			});
 		}
 
-		const data = await prisma.user.create({
-			data: {
-				email: email,
-				fullName: fullName,
-				age: age,
-				supabaseId: authData.user?.id,
-			},
+		const existingUser = await prisma.user.findUnique({
+			where: { email: email },
 		});
+
+		let data;
+		if (existingUser) {
+			data = await prisma.user.update({
+				where: { email: email },
+				data: {
+					fullName: fullName,
+					age: age,
+					supabaseId: authData.user?.id,
+				},
+			});
+		} else {
+			data = await prisma.user.create({
+				data: {
+					email: email,
+					fullName: fullName,
+					age: age,
+					supabaseId: authData.user?.id,
+				},
+			});
+		}
 
 		res.status(200).json({
 			success: true,
