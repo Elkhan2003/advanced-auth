@@ -17,7 +17,8 @@ model User {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  todo Todo[]
+  todo     Todo[]
+  favorite Favorite[]
 }
 
 model Todo {
@@ -27,4 +28,14 @@ model Todo {
   description String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Favorite {
+  id     Int @id @default(autoincrement())
+  userId Int
+  itemId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId])
 }

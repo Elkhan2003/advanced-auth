@@ -1,12 +1,19 @@
 "use client";
-import { FC } from "react";
+import { FC, useState } from "react";
 import scss from "./Header.module.scss";
 import { useGetMeQuery, useSignOutMutation } from "@/api/user";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
+import Link from "next/link";
+import { link } from "@/utils/constants/route-links";
+import { ProfileMenu } from "@/components/ui/profileMenu/ProfileMenu";
+import { useWindowSize } from "react-use";
 
 export const Header: FC = () => {
 	const router = useRouter();
+	const pathname = usePathname();
+	const { width } = useWindowSize();
+	const [isOpen, setIsOpen] = useState(false);
 	const { user, isAuthenticated, clearAuth } = useAuthStore();
 	const signOutMutation = useSignOutMutation();
 
@@ -29,44 +36,36 @@ export const Header: FC = () => {
 		<header className={scss.Header}>
 			<div className="container">
 				<div className={scss.content}>
-					<h1>ElchoDev</h1>
+					<div className={scss.logo}>
+						<h1>ElchoDev</h1>
+					</div>
+					{width >= 768 && (
+						<nav className={scss.nav}>
+							<ul>
+								{link.map((item, index) => (
+									<li key={index}>
+										<Link
+											href={item.href}
+											className={
+												pathname === item.href
+													? `${scss.link} ${scss.active}`
+													: `${scss.link}`
+											}>
+											{item.name}
+										</Link>
+									</li>
+								))}
+							</ul>
+						</nav>
+					)}
 					<div className={scss.authSection}>
-						{isAuthenticated() && (meData?.success || user) ? (
-							<div className={scss.userInfo}>
-								<div className={scss.userDetails}>
-									<span className={scss.userName}>
-										{meData?.data?.fullName || user?.fullName}
-									</span>
-									<span className={scss.userEmail}>
-										{meData?.data?.email || user?.email}
-									</span>
-									{(meData?.data?.age || user?.age) && (
-										<span className={scss.userAge}>
-											Возраст: {meData?.data?.age || user?.age}
-										</span>
-									)}
-								</div>
-								<button
-									className={scss.logoutButton}
-									onClick={handleLogOut}
-									disabled={signOutMutation.isPending}>
-									{signOutMutation.isPending ? "Выход..." : "Выйти"}
-								</button>
-							</div>
-						) : (
-							<div className={scss.authButtons}>
-								<button
-									className={scss.signUpButton}
-									onClick={() => router.push("/sign-up")}>
-									Регистрация
-								</button>
-								<button
-									className={scss.signInButton}
-									onClick={() => router.push("/sign-in")}>
-									Вход
-								</button>
-							</div>
-						)}
+						<button
+							onClick={() => {
+								setIsOpen(!isOpen);
+							}}>
+							{user?.fullName}
+						</button>
+						<ProfileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
 					</div>
 				</div>
 			</div>

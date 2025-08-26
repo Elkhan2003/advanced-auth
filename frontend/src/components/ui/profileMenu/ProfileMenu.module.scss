@@ -1,0 +1,15 @@
+.ProfileMenu {
+	position: absolute;
+	top: 45px;
+	right: 0;
+	visibility: hidden;
+	opacity: 0;
+	transition: 0.4s;
+	&.active {
+		visibility: visible;
+		opacity: 1;
+	}
+
+	padding: 15px;
+	background: #2626267d;
+}

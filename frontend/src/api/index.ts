@@ -22,6 +22,13 @@ export const api = axios.create({
 	baseURL: `${process.env.NEXT_PUBLIC_API}/api/v1`,
 });
 
+export const api_tmdb = axios.create({
+	baseURL: `${process.env.NEXT_PUBLIC_TMDB_API}/3`,
+	headers: {
+		Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+	},
+});
+
 api.interceptors.request.use((config) => {
 	const token = useAuthStore.getState().getAccessToken();
 	if (token) {
