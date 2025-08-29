@@ -20,4 +20,10 @@ namespace FAVORITE {
 	type AddFavoriteReq = {
 		itemId: number;
 	};
+
+	type DeleteFavoriteRes = {
+		success: boolean;
+		message: string;
+	};
+	type DeleteFavoriteReq = number;
 }

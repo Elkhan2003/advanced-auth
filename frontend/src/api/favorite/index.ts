@@ -20,4 +20,21 @@ const useAddFavoriteMutation = () => {
 	});
 };
 
-export { useGetFavoriteQuery, useAddFavoriteMutation };
+const useDeleteFavoriteMutation = () => {
+	return useMutation<
+		FAVORITE.DeleteFavoriteRes,
+		Error,
+		FAVORITE.DeleteFavoriteReq
+	>({
+		mutationFn: async (id) => {
+			const response = await api.delete(`/favorite/delete/${id}`);
+			return response.data;
+		},
+	});
+};
+
+export {
+	useGetFavoriteQuery,
+	useAddFavoriteMutation,
+	useDeleteFavoriteMutation,
+};

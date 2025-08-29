@@ -32,17 +32,19 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({ isOpen, setIsOpen }) => {
 					<h2>{user?.fullName}</h2>
 					<span>{user?.email}</span>
 				</div>
-				{width <= 768 && (
-					<nav>
-						<ul>
-							{link.map((item, index) => (
+				<nav>
+					<ul>
+						{width <= 768 &&
+							link.map((item, index) => (
 								<li key={index}>
 									<Link href={item.href}>{item.name}</Link>
 								</li>
 							))}
-						</ul>
-					</nav>
-				)}
+						<li>
+							<Link href="/favorites">Избранное</Link>
+						</li>
+					</ul>
+				</nav>
 				<button onClick={handleLogout}>LogOut</button>
 			</div>
 		</section>

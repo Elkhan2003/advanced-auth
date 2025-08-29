@@ -2,17 +2,27 @@
 import { FC } from "react";
 import scss from "./PopularMovie.module.scss";
 import { useGetPopularQuery } from "@/api/popular";
-import { HeartPlus } from "lucide-react";
-import { useAddFavoriteMutation, useGetFavoriteQuery } from "@/api/favorite";
+import { HeartMinus, HeartPlus } from "lucide-react";
+import {
+	useAddFavoriteMutation,
+	useDeleteFavoriteMutation,
+	useGetFavoriteQuery,
+} from "@/api/favorite";
 
 export const PopularMovie: FC = () => {
 	const { data: popularData } = useGetPopularQuery("movie");
 	const { data: favoriteData, refetch: refetchFavorite } =
 		useGetFavoriteQuery();
 	const { mutateAsync: addFavoriteMutation } = useAddFavoriteMutation();
+	const { mutateAsync: deleteFavoriteMutation } = useDeleteFavoriteMutation();
 
 	const handleAddToFavorite = async (movieId: number) => {
 		await addFavoriteMutation({ itemId: movieId });
+		await refetchFavorite();
+	};
+
+	const handleDeleteFavorite = async (movieId: number) => {
+		await deleteFavoriteMutation(movieId);
 		await refetchFavorite();
 	};
 
@@ -39,7 +49,13 @@ export const PopularMovie: FC = () => {
 										{favoriteData?.data.some(
 											(fav) => fav.itemId === item.id
 										) ? (
-											<span className={scss.added}>Added to Favorites</span>
+											<button
+												className={scss.btn}
+												onClick={() => {
+													handleDeleteFavorite(item.id);
+												}}>
+												<HeartMinus size={50} />
+											</button>
 										) : (
 											<button
 												className={scss.btn}
