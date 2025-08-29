@@ -23,11 +23,11 @@ const useCreateTodoMutation = () => {
 			const response = await api.post(`/todo-prisma/create`, todoData);
 			return response.data;
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["todos"],
-			});
-		},
+		// onSuccess: () => {
+		// 	queryClient.invalidateQueries({
+		// 		queryKey: ["todos"],
+		// 	});
+		// },
 	});
 };
 
