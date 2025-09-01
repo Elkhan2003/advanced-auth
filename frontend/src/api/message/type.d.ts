@@ -6,6 +6,8 @@ namespace MESSAGE {
 			id: number;
 			userId: number;
 			message: string;
+			createdAt: string;
+			updatedAt: string;
 			user: {
 				id: number;
 				email: string;
@@ -17,9 +19,7 @@ namespace MESSAGE {
 			};
 		}>;
 	};
-	type GetMessagesReq = {
-		enabled?: boolean;
-	};
+	type GetMessagesReq = void;
 
 	// send-message
 	type SendMessageRes = {
@@ -28,6 +28,8 @@ namespace MESSAGE {
 			id: number;
 			userId: number;
 			message: string;
+			createdAt: string;
+			updatedAt: string;
 		};
 	};
 	type SendMessageReq = {

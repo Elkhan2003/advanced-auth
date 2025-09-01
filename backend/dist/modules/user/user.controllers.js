@@ -14,6 +14,15 @@ const signUpUser = async (req, res) => {
                 message: "Email и пароль обязательны",
             });
         }
+        const existingUser = await prisma_1.default.user.findUnique({
+            where: { email: email },
+        });
+        if (existingUser) {
+            return res.status(409).json({
+                success: false,
+                message: "Такой пользователь уже существует",
+            });
+        }
         const { data: authData, error: authError } = await supabase_1.supabase.auth.signUp({
             email,
             password,
@@ -30,36 +39,20 @@ const signUpUser = async (req, res) => {
                 message: authError.message,
             });
         }
-        const existingUser = await prisma_1.default.user.findUnique({
-            where: { email: email },
+        const data = await prisma_1.default.user.create({
+            data: {
+                email: email,
+                fullName: fullName,
+                age: age,
+                supabaseId: authData.user?.id,
+            },
         });
-        let data;
-        if (existingUser) {
-            data = await prisma_1.default.user.update({
-                where: { email: email },
-                data: {
-                    fullName: fullName,
-                    age: age,
-                    supabaseId: authData.user?.id,
-                },
-            });
-        }
-        else {
-            data = await prisma_1.default.user.create({
-                data: {
-                    email: email,
-                    fullName: fullName,
-                    age: age,
-                    supabaseId: authData.user?.id,
-                },
-            });
-        }
-        res.status(200).json({
+        res.status(201).json({
             success: true,
             data: {
-                user: authData.user,
-                session: authData.session,
-                localUser: data,
+                success: true,
+                message: "Подтвердите аккаунт — письмо отправлено на вашу почту.",
+                user: data,
             },
         });
     }
@@ -79,6 +72,15 @@ const signInUser = async (req, res) => {
                 message: "Email и пароль обязательны",
             });
         }
+        const existingUser = await prisma_1.default.user.findUnique({
+            where: { email: email },
+        });
+        if (!existingUser) {
+            return res.status(404).json({
+                success: false,
+                message: "Такой пользователь не существует",
+            });
+        }
         const { data: authData, error: authError } = await supabase_1.supabase.auth.signInWithPassword({
             email,
             password,
@@ -94,12 +96,12 @@ const signInUser = async (req, res) => {
                 email: email,
             },
         });
+        const { user, ...authDataSession } = authData.session;
         res.status(200).json({
             success: true,
             data: {
-                user: authData.user,
-                session: authData.session,
-                localUser: localUser,
+                user: localUser,
+                session: authDataSession,
             },
         });
     }
@@ -204,7 +206,7 @@ const signOutUser = async (req, res) => {
     try {
         const { error } = await supabase_1.supabase.auth.signOut();
         if (error) {
-            return res.status(400).json({
+            return res.status(500).json({
                 success: false,
                 message: error.message,
             });

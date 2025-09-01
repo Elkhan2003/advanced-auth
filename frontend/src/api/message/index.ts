@@ -9,8 +9,6 @@ const useGetMessagesQuery = (params: MESSAGE.GetMessagesReq) => {
 			const response = await api.get(`/message/get-all`);
 			return response.data;
 		},
-		retryDelay: 100,
-		enabled: params.enabled,
 	});
 };
 

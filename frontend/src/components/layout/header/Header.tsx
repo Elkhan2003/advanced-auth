@@ -1,34 +1,20 @@
 "use client";
 import { FC, useState } from "react";
 import scss from "./Header.module.scss";
-import { useGetMeQuery, useSignOutMutation } from "@/api/user";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
 import Link from "next/link";
 import { link } from "@/utils/constants/route-links";
 import { ProfileMenu } from "@/components/ui/profileMenu/ProfileMenu";
 import { useWindowSize } from "react-use";
+import { useGetMeQuery } from "@/api/user";
 
 export const Header: FC = () => {
-	const router = useRouter();
 	const pathname = usePathname();
 	const { width } = useWindowSize();
 	const [isOpen, setIsOpen] = useState(false);
-	const { user, isAuthenticated, clearAuth } = useAuthStore();
-	const signOutMutation = useSignOutMutation();
-
-	const { data: meData } = useGetMeQuery({
-		enabled: isAuthenticated(),
-	});
-
-	const handleLogOut = async () => {
-		try {
-			await signOutMutation.mutateAsync();
-		} catch (error) {
-			clearAuth();
-		}
-		router.push("/sign-in");
-	};
+	const { isAuthenticated } = useAuthStore();
+	const { data: user } = useGetMeQuery({ enabled: isAuthenticated() });
 
 	return (
 		<header className={scss.Header}>
@@ -61,7 +47,7 @@ export const Header: FC = () => {
 							onClick={() => {
 								setIsOpen(!isOpen);
 							}}>
-							{user?.fullName}
+							{user?.data?.fullName}
 						</button>
 						<ProfileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
 					</div>

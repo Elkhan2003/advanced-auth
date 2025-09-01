@@ -19,8 +19,8 @@ type ISession = {
 	access_token: string;
 	refresh_token: string;
 	expires_at: number;
+	expires_in: number;
 	token_type: string;
-	user: ISupabaseUser;
 };
 
 namespace USER {
@@ -37,9 +37,8 @@ namespace USER {
 	type SignInRes = {
 		success: boolean;
 		data: {
-			user: ISupabaseUser;
+			user: IUser;
 			session: ISession;
-			localUser: IUser;
 		};
 	};
 	type SignInReq = {
@@ -51,9 +50,9 @@ namespace USER {
 	type SignUpRes = {
 		success: boolean;
 		data: {
-			user: ISupabaseUser;
-			session: ISession;
-			localUser: IUser;
+			success: boolean;
+			message: string;
+			user: IUser;
 		};
 	};
 	type SignUpReq = {
@@ -67,5 +66,17 @@ namespace USER {
 	type SignOutRes = {
 		success: boolean;
 		message: string;
+	};
+
+	// refresh-token
+	type RefreshTokenRes = {
+		success: boolean;
+		data: {
+			session: ISession;
+			user: ISupabaseUser;
+		};
+	};
+	type RefreshTokenReq = {
+		refresh_token: string;
 	};
 }

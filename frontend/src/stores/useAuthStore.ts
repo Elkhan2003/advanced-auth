@@ -2,10 +2,9 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface IAuthStore {
-	user: IUser | null;
 	accessToken: string | null;
 	refreshToken: string | null;
-	setAuth: (user: IUser, accessToken: string, refreshToken: string) => void;
+	setTokens: (accessToken: string, refreshToken: string) => void;
 	updateTokens: (accessToken: string, refreshToken: string) => void;
 	getAccessToken: () => string | null;
 	getRefreshToken: () => string | null;
@@ -13,22 +12,13 @@ interface IAuthStore {
 	isAuthenticated: () => boolean;
 }
 
-type IUser = {
-	id: number;
-	email: string;
-	fullName: string;
-	age: number;
-	supabaseId: string;
-};
-
 export const useAuthStore = create<IAuthStore>()(
 	persist(
 		(set, get) => ({
-			user: null,
 			accessToken: null,
 			refreshToken: null,
-			setAuth: (user, accessToken, refreshToken) => {
-				set({ user, accessToken, refreshToken });
+			setTokens: (accessToken, refreshToken) => {
+				set({ accessToken, refreshToken });
 			},
 			updateTokens: (accessToken, refreshToken) => {
 				set({ accessToken, refreshToken });
@@ -40,7 +30,7 @@ export const useAuthStore = create<IAuthStore>()(
 				return get().refreshToken;
 			},
 			clearAuth: () => {
-				set({ user: null, accessToken: null, refreshToken: null });
+				set({ accessToken: null, refreshToken: null });
 			},
 			isAuthenticated: () => {
 				const { accessToken } = get();
@@ -50,7 +40,6 @@ export const useAuthStore = create<IAuthStore>()(
 		{
 			name: "auth_store",
 			partialize: (state) => ({
-				user: state.user,
 				accessToken: state.accessToken,
 				refreshToken: state.refreshToken,
 			}),

@@ -6,6 +6,7 @@ import { useWindowSize } from "react-use";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { link } from "@/utils/constants/route-links";
 import Link from "next/link";
+import { useGetMeQuery } from "@/api/user";
 
 interface ProfileMenuProps {
 	isOpen: boolean;
@@ -14,8 +15,9 @@ interface ProfileMenuProps {
 
 export const ProfileMenu: FC<ProfileMenuProps> = ({ isOpen, setIsOpen }) => {
 	const router = useRouter();
-	const { user, clearAuth } = useAuthStore();
+	const { clearAuth, isAuthenticated } = useAuthStore();
 	const { width } = useWindowSize();
+	const { data: user } = useGetMeQuery({ enabled: isAuthenticated() });
 
 	const handleLogout = () => {
 		clearAuth();
@@ -29,8 +31,8 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({ isOpen, setIsOpen }) => {
 			}>
 			<div className={scss.content}>
 				<div className={scss.userInfo}>
-					<h2>{user?.fullName}</h2>
-					<span>{user?.email}</span>
+					<h2>{user?.data?.fullName}</h2>
+					<span>{user?.data?.email}</span>
 				</div>
 				<nav>
 					<ul>

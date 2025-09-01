@@ -11,6 +11,7 @@ const useGetMeQuery = (query: USER.GetMeReq) => {
 			return response.data;
 		},
 		enabled: query.enabled,
+		retry: false,
 		retryDelay: 100,
 	});
 };
@@ -18,17 +19,15 @@ const useGetMeQuery = (query: USER.GetMeReq) => {
 // sign-in
 const useSignInMutation = () => {
 	const queryClient = useQueryClient();
-	const { setAuth } = useAuthStore();
-	
+	const { setTokens } = useAuthStore();
 	return useMutation<USER.SignInRes, Error, USER.SignInReq>({
 		mutationFn: async (data) => {
 			const response = await api.post("/user/sign-in", data);
 			return response.data;
 		},
 		onSuccess: (data) => {
-			if (data.success && data.data.session && data.data.localUser) {
-				setAuth(
-					data.data.localUser,
+			if (data.success && data.data.session) {
+				setTokens(
 					data.data.session.access_token,
 					data.data.session.refresh_token
 				);
@@ -43,24 +42,37 @@ const useSignInMutation = () => {
 // sign-up
 const useSignUpMutation = () => {
 	const queryClient = useQueryClient();
-	const { setAuth } = useAuthStore();
-	
 	return useMutation<USER.SignUpRes, Error, USER.SignUpReq>({
 		mutationFn: async (data) => {
 			const response = await api.post("/user/sign-up", data);
 			return response.data;
 		},
 		onSuccess: (data) => {
-			if (data.success && data.data.session && data.data.localUser) {
-				setAuth(
-					data.data.localUser,
+			queryClient.invalidateQueries({
+				queryKey: ["me"],
+			});
+		},
+	});
+};
+
+// refresh-token
+const useRefreshTokenMutation = () => {
+	const { updateTokens, clearAuth } = useAuthStore();
+	return useMutation<USER.RefreshTokenRes, Error, USER.RefreshTokenReq>({
+		mutationFn: async (data) => {
+			const response = await api.post("/user/refresh-token", data);
+			return response.data;
+		},
+		onSuccess: (data) => {
+			if (data.success && data.data.session) {
+				updateTokens(
 					data.data.session.access_token,
 					data.data.session.refresh_token
 				);
 			}
-			queryClient.invalidateQueries({
-				queryKey: ["me"],
-			});
+		},
+		onError: () => {
+			clearAuth();
 		},
 	});
 };
@@ -69,7 +81,6 @@ const useSignUpMutation = () => {
 const useSignOutMutation = () => {
 	const queryClient = useQueryClient();
 	const { clearAuth } = useAuthStore();
-	
 	return useMutation<USER.SignOutRes, Error, void>({
 		mutationFn: async () => {
 			const response = await api.post("/user/sign-out");
@@ -86,4 +97,10 @@ const useSignOutMutation = () => {
 	});
 };
 
-export { useGetMeQuery, useSignInMutation, useSignUpMutation, useSignOutMutation };
+export {
+	useGetMeQuery,
+	useSignInMutation,
+	useSignUpMutation,
+	useRefreshTokenMutation,
+	useSignOutMutation,
+};

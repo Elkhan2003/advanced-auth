@@ -16,6 +16,8 @@ CREATE TABLE "public"."Messages" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "message" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Messages_pkey" PRIMARY KEY ("id")
 );
