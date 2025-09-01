@@ -4,9 +4,9 @@ import prisma from "../../plugins/prisma";
 const getMessages = async (req: Request, res: Response) => {
 	try {
 		const data = await prisma.messages.findMany({
-			where: {
-				userId: req.user?.id,
-			},
+			// where: {
+			// 	userId: req.user?.id,
+			// },
 			include: {
 				user: true,
 			},
