@@ -17,25 +17,13 @@ model User {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  todo     Todo[]
-  favorite Favorite[]
+  messages Messages[]
 }
 
-model Todo {
-  id          Int    @id @default(autoincrement())
-  userId      Int
-  title       String
-  description String
+model Messages {
+  id      Int    @id @default(autoincrement())
+  userId  Int
+  message String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Favorite {
-  id     Int @id @default(autoincrement())
-  userId Int
-  itemId Int
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, itemId])
 }

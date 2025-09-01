@@ -1,0 +1,10 @@
+.MessageList {
+	.content {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		.card {
+			background: #8000802c;
+		}
+	}
+}

@@ -131,7 +131,7 @@ const getMe = async (req: Request, res: Response) => {
 
 		const data = await prisma.user.findFirst({
 			where: {
-				supabaseId: userId,
+				id: userId,
 			},
 		});
 

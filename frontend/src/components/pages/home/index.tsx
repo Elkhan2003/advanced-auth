@@ -1,12 +1,11 @@
-import { TodoAdd } from "./sections/TodoAdd";
-import { TodoList } from "./sections/TodoList";
+import { MessageAdd } from "./sections/MessageAdd";
+import { MessageList } from "./sections/MessageList";
 
 export const HomePage = () => {
 	return (
 		<>
-			{/* <PopularMovie /> */}
-			<TodoAdd />
-			<TodoList />
+			<MessageAdd />
+			<MessageList />
 		</>
 	);
 };

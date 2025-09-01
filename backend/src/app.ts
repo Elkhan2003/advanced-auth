@@ -2,7 +2,7 @@ import { config } from "dotenv";
 config();
 import express from "express";
 import routes from "./routes";
-import { User } from "@supabase/supabase-js";
+import { User } from "@prisma/client";
 
 declare global {
 	namespace Express {

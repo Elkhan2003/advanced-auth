@@ -1,9 +1,7 @@
 import { Router } from "express";
 import cors from "cors";
 import userRoutes from "../modules/user/user.routes";
-import todoRoutes from "../modules/todo/todo.routes";
-import todoPrismaRoutes from "../modules/todo-prisma/todo-prisma.routes";
-import favoriteRoutes from "../modules/favorite/favorite.routes";
+import chatRoutes from "../modules/chat/chat.routes";
 
 const configCors = {
 	origin: [
@@ -17,8 +15,6 @@ const configCors = {
 const router = Router();
 
 router.use("/user", cors(configCors), userRoutes);
-router.use("/todo", cors(configCors), todoRoutes);
-router.use("/todo-prisma", cors(configCors), todoPrismaRoutes);
-router.use("/favorite", cors(configCors), favoriteRoutes);
+router.use("/message", cors(configCors), chatRoutes);
 
 export default router;
