@@ -46,4 +46,70 @@ const sendMessage = async (req: Request, res: Response) => {
 	}
 };
 
-export default { getMessages, sendMessage };
+const getUsersMessage = async (req: Request, res: Response) => {
+	try {
+		const data = await prisma.user.findMany();
+		res.status(200).send({
+			success: true,
+			data: data,
+		});
+	} catch (e) {
+		res.status(500).send({
+			success: false,
+			message: `error in getUsersMessage: ${e}`,
+		});
+	}
+};
+
+const getPrivateMessage = async (req: Request, res: Response) => {
+	const senderId = req.user?.id;
+	const receiverId = req.params.receiverId;
+	try {
+		const data = await prisma.privateMessages.findMany({
+			where: {
+				senderId: senderId,
+				receiverId: +receiverId,
+			},
+		});
+		res.status(200).send({
+			success: true,
+			data: data,
+		});
+	} catch (e) {
+		res.status(500).send({
+			success: false,
+			message: `error in getPrivateMessage: ${e}`,
+		});
+	}
+};
+
+const sendMessageUser = async (req: Request, res: Response) => {
+	const senderId = req.user?.id;
+	const { receiverId, message } = req.body;
+	try {
+		const data = await prisma.privateMessages.create({
+			data: {
+				senderId: Number(senderId),
+				receiverId: Number(receiverId),
+				message: message,
+			},
+		});
+		res.status(200).send({
+			success: true,
+			data: data,
+		});
+	} catch (e) {
+		res.status(500).send({
+			success: false,
+			message: `error in sendMessageUser: ${e}`,
+		});
+	}
+};
+
+export default {
+	getMessages,
+	sendMessage,
+	getUsersMessage,
+	getPrivateMessage,
+	sendMessageUser,
+};

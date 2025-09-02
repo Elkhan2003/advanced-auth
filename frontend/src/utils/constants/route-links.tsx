@@ -1,14 +1,10 @@
 export const link = [
 	{
-		name: "Home",
+		name: "Chat",
 		href: "/",
 	},
 	{
-		name: "Movie",
-		href: "/movie",
-	},
-	{
-		name: "TV-Show",
-		href: "/tv-show",
+		name: "Direct",
+		href: "/direct",
 	},
 ];
